@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
-DOCKER = os.getenv('USER') != 'ubuntu'
+IS_DOCKER = os.getenv('USER') == 'ubuntu'
+IS_VAGRANT = os.getenv('USER') == 'vagrant'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,7 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_swagger',
+
     'shiptrader',
+    'api_v1',
 ]
 
 MIDDLEWARE = [
@@ -75,20 +80,21 @@ WSGI_APPLICATION = 'testsite.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
+        'NAME': 'shiptrader',
     }
 }
 
-if DOCKER:
+if IS_VAGRANT:
+    DATABASES['default']['NAME'] = 'shiptrader'
+    DATABASES['default']['USER'] = 'vagrant'
+elif IS_DOCKER:
     DATABASES['default']['NAME'] = 'postgres'
     DATABASES['default']['HOST'] = 'postgresql'
     DATABASES['default']['USER'] = 'postgres'
     DATABASES['default']['PASSWORD'] = 'postgres'
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -127,3 +133,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Swagger settings
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10
+}
+
+
+try:
+    from testsite.local_settings import *
+except ImportError:
+    pass
