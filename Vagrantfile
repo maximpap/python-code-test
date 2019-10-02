@@ -10,7 +10,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Django runserver networking
     config.vm.network "forwarded_port", guest: 8008, host: 8008
 
-    config.vm.provision "shell", path:"./scripts/setup-server.sh"
+    config.vm.provision "shell", path:"./scripts/setup-vagrant-server.sh"
 
     config.vm.provider :virtualbox do |vb, override|
         vb.memory = 512
