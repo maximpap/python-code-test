@@ -18,7 +18,7 @@ The DRF swagger must be available on http://localhost:8008/api/v1/docs/
 
 - [+] We need to be able to import all existing
       [Starships](https://swapi.co/documentation#starships) to the provided Starship
-      Model
+      Model (use ./manage.py commands `fetch_stsarships` and `fetch_listings`)
 - [+] A potential buyer can browse all Starships
 - [+] A potential buyer can browse all the listings for a given `starship_class`
 - [+] A potential buyer can sort listings by price or time of listing
